@@ -1,32 +1,52 @@
-/* #6 start the #external #action and say hello */
 console.log("App is alive");
 
+
+
+var currentChannel;
+currentChannel = sevencontinents;
+var currentLocation = {
+    latitude: 48.262408,
+    longitude: 11.666553,
+    what3words: "spilled.spells.odds"
+};
 /**
  * #6 #Switcher function for the #channels name in the right app bar
- * @param channelName Text which is set
+ * @param channelObject Text which is set
  */
-function switchChannel(channelName) {
+
+function switchChannel(channelObject) {
     //Log the channel switch
-    console.log("Tuning in to channel", channelName);
+    console.log("Tuning in to channel", channelObject.name);
 
     //Write the new channel to the right app bar
-    document.getElementById('channel-name').innerHTML = channelName;
+    document.getElementById('channel-name').innerHTML = channelObject.name;
 
     //#6 change the #channel #location
-    document.getElementById('channel-location').innerHTML = 'by <a href="http://w3w.co/upgrading.never.helps" target="_blank"><strong>upgrading.never.helps</strong></a>';
+    document.getElementById('channel-location').innerHTML = 'by <a href="http://w3w.co/'
+        + channelObject.createdBy
+        + '" target="_blank"><strong>'
+        + channelObject.createdBy
+        + '</strong></a>';
 
-    /* #6 #liking channels on #click */
-    $('#channel-star').attr('src', 'http://ip.lfe.mw.tum.de/sections/star-o.png');
+    $('#chat h1 i').removeClass('far fas');
 
-    /* #6 #highlight the selected #channel.
-       This is inefficient (jQuery has to search all channel list items), but we'll change it later on */
+    $('#chat h1 i').addClass(channelObject.starred ? 'fas' : 'far');
+
+    /* #6 #highlight the selected #channel.*/
     $('#channels li').removeClass('selected');
-    $('#channels li:contains(' + channelName + ')').addClass('selected');
+    $('#channels li:contains(' + channelObject.name + ')').addClass('selected');
+    currentChannel = channelObject;
 }
 
 /* #6 #liking a channel on #click */
 function star() {
-    $('#channel-star').attr('src', 'http://ip.lfe.mw.tum.de/sections/star.png');
+    $('#chat h1 i').toggleClass('fas');
+    $('#chat h1 i').toggleClass('far');
+
+    currentChannel.starred = !currentChannel.starred;
+
+    $('#channels li:contains(' + currentChannel.name + ') .fa-star').removeClass('fas far');
+    $('#channels li:contains(' + currentChannel.name + ') .fa-star').addClass(currentChannel.starred ? 'fas' : 'far');
 }
 
 /**
