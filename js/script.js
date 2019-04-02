@@ -130,7 +130,7 @@ function createMessageElement(messageObject) {
 
 
 function listChannels() {
-    $('#channels ul').append("<li>New Channel</li>")
+    // $('#channels ul').append("<li>#Design</li>")
     $('#channels ul').append(createChannelElement(yummy));
     $('#channels ul').append(createChannelElement(sevencontinents));
     $('#channels ul').append(createChannelElement(killerapp));
@@ -145,16 +145,11 @@ function listChannels() {
  */
 function createChannelElement(channelObject) {
 
-    //  <li>
-    //  {{ name }}
-    //     <span class="channel-meta">
-    //         <i class="far fa-star"></i>
-    //         <i class="fas fa-chevron-right"></i>
-    //     </span>
-    //  </li>
-
-
     var channel = $('<li>').text(channelObject.name);
+    // channelObject in lowercase for switchChannel
+    var channelObjectName = channelObject.name.substr(1).toLowerCase();
+    channel.attr('onclick', 'switchChannel('+channelObjectName+')');
+
     var meta = 
     $('<span>').addClass('channel-meta').appendTo(channel);
     $('<i>').addClass('fa-star').addClass(channelObject.starred ? 'fas' : 'far').appendTo(meta);
