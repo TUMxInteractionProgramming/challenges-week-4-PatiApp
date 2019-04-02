@@ -71,3 +71,98 @@ function toggleEmojis() {
     /* $('#emojis').show(); // #show */
     $('#emojis').toggle(); // #toggle
 }
+
+
+
+
+
+
+/** for This
+ * @param text `String`
+ * @constructor
+ */
+
+function Message(text) {
+
+    this.createdBy = currentLocation.what3words;
+    this.latitude = currentLocation.latitude;
+    this.longitude = currentLocation.longitude;
+    this.createdOn = new Date(Date.now())
+    this.expiresOn = new Date(Date.now() + 15 * 60 * 1000);
+    this.text = text;
+    this.own = true;
+}
+
+function sendMessage() {
+    //  var message = new Message("Hello Chatter");
+
+    var message = new Message($('#message').val());
+    console.log("New message:", message.text);
+
+    $('#messages').append(createMessageElement(message));
+
+    $('#messages').scrollTop($('#messages').prop('scrollHeight'));
+
+    $('#message').val('');
+}
+
+/**
+ * 
+ * @param messageObject 
+ * @returns
+ */
+function createMessageElement(messageObject) {
+
+    var expiresIn = Math.round((messageObject.expiresOn - Date.now()) / 1000 / 60);
+
+    return '<div class="message'+
+
+        (messageObject.own ? ' own' : '') +
+        '">' +
+        '<h3><a href="http://w3w.co/' + messageObject.createdBy + '" target="_blank">'+
+        '<strong>' + messageObject.createdBy + '</strong></a>' +
+        messageObject.createdOn.toLocaleString() +
+        '<em>' + expiresIn+ ' min. left</em></h3>' +
+        '<p>' + messageObject.text + '</p>' +
+        '<button>+5 min.</button>' +
+        '</div>';
+}
+
+
+function listChannels() {
+    $('#channels ul').append("<li>New Channel</li>")
+    $('#channels ul').append(createChannelElement(yummy));
+    $('#channels ul').append(createChannelElement(sevencontinents));
+    $('#channels ul').append(createChannelElement(killerapp));
+    $('#channels ul').append(createChannelElement(firstpersononmars));
+    $('#channels ul').append(createChannelElement(octoberfest));
+}
+
+/**
+ * 
+ * @param channelObject
+ * @returns {HTMLElement}
+ */
+function createChannelElement(channelObject) {
+
+    //  <li>
+    //  {{ name }}
+    //     <span class="channel-meta">
+    //         <i class="far fa-star"></i>
+    //         <i class="fas fa-chevron-right"></i>
+    //     </span>
+    //  </li>
+
+
+    var channel = $('<li>').text(channelObject.name);
+    var meta = 
+    $('<span>').addClass('channel-meta').appendTo(channel);
+    $('<i>').addClass('fa-star').addClass(channelObject.starred ? 'fas' : 'far').appendTo(meta);
+
+    $('<span>').text(channelObject.expiresIn + ' min').appendTo(meta);
+    $('<span>').text(channelObject.messageCount + ' new').appendTo(meta);
+
+    $('<i>').addClass('fas').addClass('fa-chevron-right').appendTo(meta);
+
+    return channel;
+}
